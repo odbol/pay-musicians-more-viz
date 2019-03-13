@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html>
+<head>
+	<style type="text/css">
+body {
+	font: 12pt sans-serif;
+}
+
+.chartHolder {
+	display: block;
+    width: 49%;
+    margin: 10 0;
+    float: left;
+    text-align: center;
+}
+
+.ui {
+	margin: 24px 0;
+}
+
+label {
+	margin-top: 8px;
+	display:block;
+	font-weight: bold;
+}
+	</style>
+
+</head>
+<body>
+	<div class="ui musicListeners">
+		Choose Music Listener:
+		<div id='musicListeners'>
+			<button value="play-music-tyler.js">Tyler</button>
+			<button value="play-music-dan-parsed.js">Dan</button>
+		</div>
+	</div>
+	<div id='barChart' class='chartHolder'></div>
+	<div id='pieChart' class='chartHolder'>
+		<div class="ui">
+		  <input type="range" id="profitMargin" name="profitMargin" min="0" max="100" /><span id='profitMarginPercent'></span>%
+		  <label for="volume">FairStreamShare Profit Margin</label>
+		</div>
+		<div class="ui">
+		  <input type="range" id="timeRange" name="timeRange" min="1" max="100" /><span id='timeRangeValue'></span> months
+		  <label for="timeRange">Time Range</label>
+		</div>
+	</div>
+
+	<ol id='artists'>
+
+	</ol>
+</body>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.js"></script>
+
+<script src="graphs.js"></script>
+<script src="music-viz.js"></script>
+
+<script>
+
+var musicViz = MusicViz();
+
+function loadEvents(url) {
+	d3.json(url)
+		.then((json) => musicViz.showEvents(json.map((d) => {
+			d.timestamp = new Date(Date.parse(d.timestamp));
+			return d;
+		})))
+		// .catch(function (e) {
+		// 	console.error('Error fetching data: ' + e);
+		// });
+}
+
+var musicListeners = document.getElementById('musicListeners');
+musicListeners.addEventListener('click', (ev) => {
+	var url = ev.target.value;
+	url && loadEvents(url);
+});
+
+loadEvents('play-music-tyler.js');
+</script>
+</html>

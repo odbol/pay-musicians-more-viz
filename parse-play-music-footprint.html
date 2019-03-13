@@ -1,0 +1,27 @@
+<!DOCTYPE>
+<html>
+<head>
+
+</head>
+<body>
+
+</body>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
+<script src="play-music-footprints.js"></script>
+
+<script>
+
+var playbackEventsRaw = footprint.map(d => d.data['wireless_android_play_playlog.music.footprints.PlaybackEvent']);
+var playbackEvents = playbackEventsRaw.map(d => {
+	return {
+		artist: d.item_metadata.subtitle,
+		title: d.item_metadata.title,
+		timestamp: new Date(d.event_info.event_time_ms)
+	}
+});
+
+console.log(JSON.stringify(playbackEvents));
+
+</script>
+</html>
