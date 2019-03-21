@@ -55,6 +55,8 @@ label {
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/5.9.1/d3.js"></script>
 
+<script src="file-loader.js"></script>
+<script src="spotify-parser.js"></script>
 <script src="graphs.js"></script>
 <script src="music-viz.js"></script>
 
@@ -80,5 +82,10 @@ musicListeners.addEventListener('click', (ev) => {
 });
 
 loadEvents('play-music-tyler.js');
+
+
+
+var parser = new SpotifyParser();
+var loader = new FileLoader(document.body, (json) => musicViz.showEvents(parser.parse(json)));
 </script>
 </html>
