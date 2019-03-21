@@ -22,17 +22,21 @@ var MusicViz = function () {
 	 	playCountsByArtist,
 		artistPlayCounts,
 		totalPlayCount,
-		avgPlaysPerDay,
 		updateDates = () => {
-			var earliestTimestamp = LATEST_EVENT.timestamp.getTime() - (currentMonthRange * 30 * 24 * 60 * 60 * 1000);
+			var timeRangeInDays = currentMonthRange * 30;
+			var earliestTimestamp = LATEST_EVENT.timestamp.getTime() - (timeRangeInDays * 24 * 60 * 60 * 1000);
 			var playbackEventsForTime = playbackEvents.filter(d => d.timestamp.getTime() >= earliestTimestamp);
 			playCountsByArtist = _.countBy(playbackEventsForTime, 'artist');
 			artistPlayCounts = _.sortBy(_.map(playCountsByArtist, (count, artist) => {return {count, artist}}), d => -d.count);
 			totalPlayCount = _.reduce(artistPlayCounts, (sum, d) => sum + d.count, 0);
 
-			avgPlaysPerDay = totalPlayCount / TOTAL_TIME_IN_DAYS;
 
-			playsPerDay.innerHTML = Math.round(avgPlaysPerDay);
+			var avgPlaysPerDay = totalPlayCount / timeRangeInDays,
+				totalArtists = _.size(playCountsByArtist);
+
+			playsPerDayEl.innerHTML = Math.round(avgPlaysPerDay);
+			totalArtistsEl.innerHTML = totalArtists;
+			playsPerArtistEl.innerHTML = Math.round(totalPlayCount / totalArtists);
 		};
 
 	var totalFees,
@@ -95,7 +99,9 @@ var MusicViz = function () {
 
 
 	// UI
-	var playsPerDay = document.getElementById('playsPerDay');
+	var playsPerDayEl = document.getElementById('playsPerDay'),
+		playsPerArtistEl = document.getElementById('playsPerArtist'),
+		totalArtistsEl = document.getElementById('totalArtists');
 
 	var profitMargin = document.getElementById('profitMargin'),
 		profitMarginPercent = document.getElementById('profitMarginPercent');
