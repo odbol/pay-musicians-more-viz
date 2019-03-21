@@ -3,7 +3,9 @@ var SpotifyParser = function () {
 };
 
 SpotifyParser.prototype.parse = function (json) {
-	return json.map((d) => {
+	return json
+		.filter((d) => d.msPlayed > 30 * 1000) // must play longer than 30 seconds to count as streamed
+		.map((d) => {
 			return {
 				artist: d.artistName,
 				title: d.trackName,
