@@ -129,6 +129,8 @@ var MusicViz = function () {
 
 	return {
 		showEvents: function (events) {
+			//console.log(JSON.stringify(events));
+
 			resetColors();
 			loadEvents(events);
 
